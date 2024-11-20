@@ -91,7 +91,7 @@
                     </div>
 
                     <div class="text-edit">
-                                <a href="RPG-Character-Management-System/Pages/editCharacter.php?edit=<?php echo $character['id'];?>"
+                                <a href="/RPG-Character-Management-System/Pages/editCharacter.php?edit=<?php echo $character['id'];?>"
                                    class="btn btn-warning btn-sm">
                                     Edit
                                 </a>
@@ -167,6 +167,8 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
+<?php require_once("Templates/footer.php"); ?>
 
 
 </html>

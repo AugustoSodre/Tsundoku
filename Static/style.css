@@ -1,5 +1,10 @@
+
+/*This part was made by ChatGPT */
+
 .card {
-    min-height: 450px; /* You can adjust this value based on your content */
+    --bs-card-bg: #0a0a0a;
+    
+    min-height: 450px; 
     display: flex;
     flex-direction: column;
     

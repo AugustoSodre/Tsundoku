@@ -78,7 +78,7 @@
 
     <div class="container mt-4">
         
-        <!-- Form -->
+        <!-- Main Form (Claude formatted it all from my raw HTML to Bootstrap) -->
         <div class="card mb-4">
                 <div class="card-body">
                     <h5 class="card-title">Create New Character</h5>
@@ -187,5 +187,8 @@
     
 
 </body>
+
+<?php require_once("../Templates/footer.php"); ?>
+
 </html>
 

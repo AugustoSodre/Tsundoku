@@ -1,5 +1,6 @@
 <?php
-echo "
+//Claude told me to use those HTML tags to make it less buggy
+echo <<<HTML
 <nav class='navbar navbar-expand-lg bg-dark' data-bs-theme='dark' style='color: white;'>
   <div class='container-fluid'>
     <a class='navbar-brand text-white' href='#'>RPG Characters Manager</a>
@@ -19,4 +20,4 @@ echo "
     </div>
   </div>
 </nav>
-    ";
+HTML;
