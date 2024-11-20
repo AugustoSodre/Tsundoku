@@ -16,7 +16,6 @@ try{
 }
 
 //Creating tables
-
 $query = 
 "CREATE TABLE IF NOT EXISTS characters(
     id INT AUTO_INCREMENT PRIMARY KEY,
