@@ -10,9 +10,9 @@ $password = "";
 try{
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+    
 } catch (PDOException $e) {
-    echo "There was an error connecting to the DB: " + $e;
+    die("There was an error connecting to the DB: " + $e);
 }
 
 //Creating tables
@@ -25,6 +25,7 @@ $query =
     class VARCHAR(50) NOT NULL,
     level int DEFAULT 1,
     background TEXT,
+    campaign VARCHAR(50) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -40,4 +41,8 @@ CREATE TABLE IF NOT EXISTS attributes(
     FOREIGN KEY(character_id) REFERENCES characters (id)
 );";
 
-$pdo->exec($query);
+try{
+    $pdo->exec($query);
+} catch (PDOException $e){
+    echo "There was an error in the DB: " + $e;
+}
