@@ -1,0 +1,20 @@
+.card {
+    min-height: 450px; /* You can adjust this value based on your content */
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.card-body {
+    flex-grow: 1; /* Ensures the body takes up available space */
+    padding-bottom: 0; /* Remove extra padding from the bottom */
+}
+
+.card-footer {
+    margin-top: bottom; /* Ensures the button is pushed to the bottom */
+    padding-top: 20px; /* Optional, for some space above the button */
+}
+
+.text-end {
+    margin-top: bottom; /* Ensures the button is aligned at the bottom */
+}

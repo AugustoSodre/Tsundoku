@@ -3,6 +3,43 @@
     require_once("../Configs/db.config.php");
 
     
+
+    //Get method
+    if ($_SERVER['REQUEST_METHOD'] == "GET" && isset($_GET['edit'])){
+        //Getting the specific character
+        try{
+            $id = $_GET['edit'];
+            $stmt = $pdo->query("SELECT 
+            c.id, 
+            c.name, 
+            c.race, 
+            c.class, 
+            c.age, 
+            c.level,
+            c.background,
+            c.campaign,
+            a.strength, 
+            a.dexterity, 
+            a.constitution, 
+            a.intelligence, 
+            a.wisdom, 
+            a.charisma
+            FROM 
+                characters c
+            INNER JOIN 
+                attributes a ON c.id = a.character_id
+            WHERE id = $id
+            ");
+        
+            $character = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+            } catch (PDOException $e){
+            echo "Something went wrong: " . $e;
+            }
+    }
+
+    
+    //Post method
     if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['add_character'])){
         
         //Adding character
@@ -87,7 +124,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Character Name</label>
-                                    <input type="text" name="name" class="form-control" required>
+                                    <input type="text" name="name" class="form-control" placeholder=<?php echo $character['name']?> value=<?php echo $character['name']?>>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Race</label>
