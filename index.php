@@ -1,35 +1,44 @@
 <?php
     session_start();
-    require_once("Configs/db.config.php");
     
-    //Getting all characters
-    try{
-    $stmt = $pdo->query("SELECT 
-    c.id, 
-    c.name, 
-    c.race, 
-    c.class, 
-    c.age, 
-    c.level,
-    c.background,
-    c.campaign,
-    a.strength, 
-    a.dexterity, 
-    a.constitution, 
-    a.intelligence, 
-    a.wisdom, 
-    a.charisma
-    FROM 
-        characters c
-    INNER JOIN 
-        attributes a ON c.id = a.character_id  
-    ");
+    
+    function getCharactersFromDB($filter){
+        require_once("Configs/db.config.php");
 
-    $characters = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        //Getting all characters, no filters
+        if ($filter == null){
+            try{
+                $stmt = $pdo->query("SELECT 
+                c.id, 
+                c.name, 
+                c.race, 
+                c.class, 
+                c.age, 
+                c.level,
+                c.background,
+                c.campaign,
+                a.strength, 
+                a.dexterity, 
+                a.constitution, 
+                a.intelligence, 
+                a.wisdom, 
+                a.charisma
+                FROM 
+                    characters c
+                INNER JOIN 
+                    attributes a ON c.id = a.character_id  
+                ");
+            
+                $characters = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    } catch (PDOException $e){
-      echo "Something went wrong: " . $e;
-    }
+                return $characters;
+            
+                } catch (PDOException $e){
+                    echo "Something went wrong: " . $e;
+                }
+        }
+    };
+    
 
     if (isset($_GET['delete'])){
       $stmt = $pdo->prepare("
@@ -44,7 +53,7 @@
       exit();
     }
 
-
+    $characters = getCharactersFromDB(null);
 
 ?>
 
@@ -73,6 +82,58 @@
                 ?>
             </div>
     <?php endif; ?>
+    
+        <div class="mb-3">
+            Filter By
+            <form action="" class="d-flex justify-content-between align-items-center">
+
+                <!--- Check boxes for the specific filter --->
+                <div class="mb-3">
+                        <select class="form-select d-flex">
+                            <?php 
+                                $options = [
+                                    "Campaign",
+                                    "Class",
+                                    "Level",
+                                    "Name",
+                                    "Race"
+                                ];
+                                
+                                foreach ($options as $option){
+                                    echo <<<HTML
+                                    <option value=$option>$option</option>
+                                    HTML;
+                                }
+                            ?>
+                        </select>
+                </div>
+                
+                <!--- Radios for ascending or descending order --->
+                <div class="d-flex">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="ascending" id="flexRadioDefault1">
+                        <label class="form-check-label" for="flexRadioDefault1">
+                            Ascending
+                        </label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="descending" id="flexRadioDefault2">
+                        <label class="form-check-label" for="flexRadioDefault1">
+                            Descending
+                        </label>
+                    </div>
+                </div>
+
+            </form>
+
+            
+            
+            
+            
+        </div>
+
+    
 
     <div class="row">
     <?php foreach ($characters as $character): ?>
@@ -81,7 +142,6 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
 
                     <h5 class="mb-0"><?php echo htmlspecialchars($character['name']); ?></h5>
-                    
 
                     <div>
                         <span class="badge bg-secondary"><?php echo htmlspecialchars($character['race']); ?></span>
