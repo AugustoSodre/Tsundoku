@@ -104,20 +104,30 @@
                                 <div class="mb-3">
                                     <label class="form-label">Class</label>
                                     <select name="class" class="form-control" required>
-                                        <option value="Artificer">Artificer</option>
-                                        <option value="Barbarian">Barbarian</option>
-                                        <option value="Bard">Bard</option>
-                                        <option value="Blood Hunter">Blood Hunter</option>
-                                        <option value="Cleric">Cleric</option>
-                                        <option value="Druid">Druid</option>
-                                        <option value="Fighter">Fighter</option>
-                                        <option value="Monk">Monk</option>
-                                        <option value="Paladin">Paladin</option>
-                                        <option value="Ranger">Ranger</option>
-                                        <option value="Rogue">Rogue</option>
-                                        <option value="Sorcerer">Sorcerer</option>
-                                        <option value="Warlock">Warlock</option>
-                                        <option value="Wizard">Wizard</option>
+                                        <?php 
+                                            $classes = [
+                                                "Artificer",
+                                                "Barbarian",
+                                                "Bard",
+                                                "Blood Hunter",
+                                                "Cleric",
+                                                "Druid",
+                                                "Fighter",
+                                                "Monk",
+                                                "Paladin",
+                                                "Ranger",
+                                                "Rogue",
+                                                "Sorcerer",
+                                                "Warlock"
+                                            ];
+
+                                            foreach ($classes as $class){
+                                                echo <<<HTML
+                                                <option value=$class>$class</option>
+                                                HTML;
+                                            }
+
+                                        ?>
                                     </select>
                                 </div>
                             </div>
