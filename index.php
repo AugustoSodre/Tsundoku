@@ -1,14 +1,74 @@
 <?php
     session_start();
-    
-    
-    function getCharactersFromDB($filter){
-        require_once("Configs/db.config.php");
 
-        //Getting all characters, no filters
-        if ($filter == null){
-            try{
+    function getCharactersFromDB($filter = null) {
+        require("Configs/db.config.php");
+    
+        // Accepted filters
+        $accepted_columns = [
+            "created_at",
+            "campaign",
+            "class",
+            "level",
+            "name",
+            "race"
+        ];
+    
+        // If no filter, return all characters
+        if ($filter === null) {
+            try {
                 $stmt = $pdo->query("SELECT 
+                    c.id, 
+                    c.name, 
+                    c.race, 
+                    c.class, 
+                    c.age, 
+                    c.level,
+                    c.background,
+                    c.campaign,
+                    a.strength, 
+                    a.dexterity, 
+                    a.constitution, 
+                    a.intelligence, 
+                    a.wisdom, 
+                    a.charisma
+                FROM 
+                    characters c
+                INNER JOIN 
+                    attributes a ON c.id = a.character_id");
+            
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            } catch (PDOException $e) {
+                error_log("Database error: " . $e->getMessage());
+                return null;
+            }
+        }
+    
+        // Translate filter
+        $filter = match($filter) {
+            "Created at" => "created_at",
+            "Campaign" => "campaign",
+            "Class" => "class",
+            "Level" => "level",
+            "Name" => "name",
+            "Race" => "race",
+            default => null
+        };
+    
+        // Check if filter is valid
+        if (!in_array($filter, $accepted_columns)) {
+            error_log("Invalid filter: " . $filter);
+            return null;
+        }
+
+        
+    
+        try {
+            // Selectng the characters in the DB using provided filter
+            $filter = "c." . $filter;
+
+            $stmt = $pdo->prepare("SELECT 
                 c.id, 
                 c.name, 
                 c.race, 
@@ -17,29 +77,42 @@
                 c.level,
                 c.background,
                 c.campaign,
+                c.created_at,
                 a.strength, 
                 a.dexterity, 
                 a.constitution, 
                 a.intelligence, 
                 a.wisdom, 
                 a.charisma
-                FROM 
-                    characters c
-                INNER JOIN 
-                    attributes a ON c.id = a.character_id  
-                ");
+            FROM 
+                characters c
+            INNER JOIN 
+                attributes a ON c.id = a.character_id
+            ORDER BY " . $filter . " ASC");
             
-                $characters = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                return $characters;
-            
-                } catch (PDOException $e){
-                    echo "Something went wrong: " . $e;
-                }
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        } catch (PDOException $e) {
+            error_log("Database error: " . $e->getMessage());
+            return null;
         }
-    };
-    
+    }
 
+    //At the start of the page
+    $characters = getCharactersFromDB(null);
+    
+    //Filtering using the GET method
+    if ($_SERVER['REQUEST_METHOD'] == "GET"){
+        if (isset(($_GET['filter'])) && !empty($_GET['filter'])){
+            $characters = getCharactersFromDB($_GET['filter']);
+        } else{
+            $characters = getCharactersFromDB(null);
+        }
+    }
+
+
+    //Deleting a character
     if (isset($_GET['delete'])){
       $stmt = $pdo->prepare("
       DELETE FROM attributes WHERE character_id = ?;
@@ -53,7 +126,7 @@
       exit();
     }
 
-    $characters = getCharactersFromDB(null);
+    
 
 ?>
 
@@ -85,13 +158,14 @@
     
         <div class="mb-3">
             Filter By
-            <form action="" class="d-flex justify-content-between align-items-center">
+            <form action="" method="get" class="d-flex justify-content-between align-items-center" >
 
                 <!--- Check boxes for the specific filter --->
                 <div class="mb-3">
-                        <select class="form-select d-flex">
+                        <select name="filter" class="form-select d-flex justify-content-between align-items-center">
                             <?php 
                                 $options = [
+                                    "Created at",
                                     "Campaign",
                                     "Class",
                                     "Level",
@@ -101,14 +175,16 @@
                                 
                                 foreach ($options as $option){
                                     echo <<<HTML
-                                    <option value=$option>$option</option>
+                                    <option value="$option">$option</option>
                                     HTML;
                                 }
                             ?>
                         </select>
+
+                        <button class="btn btn-outline-secondary" type="submit">Filter!</button>
                 </div>
                 
-                <!--- Radios for ascending or descending order --->
+                <!--- Radios for ascending or descending order 
                 <div class="d-flex">
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="ascending" id="flexRadioDefault1">
@@ -124,12 +200,9 @@
                         </label>
                     </div>
                 </div>
+                --->
 
             </form>
-
-            
-            
-            
             
         </div>
 
