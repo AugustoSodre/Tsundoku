@@ -1,9 +1,11 @@
 <?php
     session_start();
 
-    function getCharactersFromDB($filter = null) {
+    function getCharactersFromDB($filter = "Created At", $order = "asc") {
         require("Configs/db.config.php");
-    
+        
+        //-----------------Filter validation-------------//
+        
         // Accepted filters
         $accepted_columns = [
             "created_at",
@@ -14,59 +16,62 @@
             "race"
         ];
     
-        // If no filter, return all characters
-        if ($filter === null) {
-            try {
-                $stmt = $pdo->query("SELECT 
-                    c.id, 
-                    c.name, 
-                    c.race, 
-                    c.class, 
-                    c.age, 
-                    c.level,
-                    c.background,
-                    c.campaign,
-                    a.strength, 
-                    a.dexterity, 
-                    a.constitution, 
-                    a.intelligence, 
-                    a.wisdom, 
-                    a.charisma
-                FROM 
-                    characters c
-                INNER JOIN 
-                    attributes a ON c.id = a.character_id");
-            
-                return $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
-            } catch (PDOException $e) {
-                error_log("Database error: " . $e->getMessage());
-                return null;
-            }
-        }
-    
         // Translate filter
         $filter = match($filter) {
-            "Created at" => "created_at",
+            "Created At" => "created_at",
             "Campaign" => "campaign",
             "Class" => "class",
             "Level" => "level",
             "Name" => "name",
             "Race" => "race",
-            default => null
+            default => "created_at"
         };
     
-        // Check if filter is valid
+        // Check if filter is valid, within the accepted columns
         if (!in_array($filter, $accepted_columns)) {
             error_log("Invalid filter: " . $filter);
             return null;
         }
 
+        //-----------------------------------------------//
         
-    
+
+
+        //--------------Order Validation-----------------//
+
+        
+
+        // Accepted Orders
+        $accepted_orders = ["ASC", "DESC"];
+
+        
+
+        //Translating Orders
+        $order = match($order){
+            "asc" => "ASC",
+            "desc" => "DESC",
+            default => "ASC"
+        };
+
+        
+
+        //Check if Order is valid, within the accepted orders
+        if (!in_array($order, $accepted_orders)){
+            error_log("Invalid order: " . $order);
+            return null;
+        }
+
+        //-----------------------------------------------//
+
+        
+        
+        
+        //--------------DataBase Queries-----------------//
         try {
-            // Selectng the characters in the DB using provided filter
+            // Selecting the characters in the DB using provided filter
+
             $filter = "c." . $filter;
+
 
             $stmt = $pdo->prepare("SELECT 
                 c.id, 
@@ -88,26 +93,31 @@
                 characters c
             INNER JOIN 
                 attributes a ON c.id = a.character_id
-            ORDER BY " . $filter . " ASC");
+            ORDER BY " . $filter . " " . $order . ";");
             
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         
         } catch (PDOException $e) {
+            error_reporting(E_ALL);
+            ini_set('display_errors', 1);
             error_log("Database error: " . $e->getMessage());
             return null;
         }
     }
+    //-----------------------------------------------//
+
 
     //At the start of the page
-    $characters = getCharactersFromDB(null);
+    $characters = getCharactersFromDB("Created At");
     
     //Filtering using the GET method
     if ($_SERVER['REQUEST_METHOD'] == "GET"){
         if (isset(($_GET['filter'])) && !empty($_GET['filter'])){
-            $characters = getCharactersFromDB($_GET['filter']);
+            $order = isset($_GET['order']) ? $_GET['order'] : 'asc';
+            $characters = getCharactersFromDB($_GET['filter'], $order);
         } else{
-            $characters = getCharactersFromDB(null);
+            $characters = getCharactersFromDB("Created At", "asc");
         }
     }
 
@@ -156,55 +166,70 @@
             </div>
     <?php endif; ?>
     
-        <div class="mb-3">
-            Filter By
-            <form action="" method="get" class="d-flex justify-content-between align-items-center" >
-
-                <!--- Check boxes for the specific filter --->
-                <div class="mb-3">
-                        <select name="filter" class="form-select d-flex justify-content-between align-items-center">
-                            <?php 
-                                $options = [
-                                    "Created at",
-                                    "Campaign",
-                                    "Class",
-                                    "Level",
-                                    "Name",
-                                    "Race"
-                                ];
+    <div class="container-fluid mb-3">
+    <div class="row align-items-center">
+        <div class="col-12">
+            <h6 class="mb-2 text-muted">Filter By</h6>
+            <form action="" method="get" class="row g-2 align-items-center">
+                <div class="col-md-4">
+                    <select name="filter" class="form-select">
+                        <?php 
+                            //Default Options for filtering
+                            $options = [
+                                "Created At",
+                                "Campaign",
+                                "Class",
+                                "Level",
+                                "Name",
+                                "Race"
+                            ];
+                            
+                            //If an option is already selected:
+                            if (isset($_GET['filter']) && $_GET['filter'] != $options[0]){
+                                $oldOption = $options[0]; // Getting the old first option
                                 
-                                foreach ($options as $option){
-                                    echo <<<HTML
-                                    <option value="$option">$option</option>
-                                    HTML;
-                                }
-                            ?>
-                        </select>
+                                $options = array_diff($options, [$_GET['filter']]); //Removing the filter, that was still in the old position
 
-                        <button class="btn btn-outline-secondary" type="submit">Filter!</button>
+                                $options[0] = $_GET['filter']; // The first option will be the selected filter!
+
+                                array_push($options, $oldOption); //The old first option will get to the end of the list!
+                            }
+                            
+                            foreach ($options as $option){
+                                $selected = (isset($_GET['filter']) && $_GET['filter'] == $option) ? 'selected' : '';
+                                echo "<option value=\"$option\" $selected>$option</option>";
+                            }
+                        ?>
+                    </select>
                 </div>
-                
-                <!--- Radios for ascending or descending order 
-                <div class="d-flex">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="ascending" id="flexRadioDefault1">
-                        <label class="form-check-label" for="flexRadioDefault1">
-                            Ascending
-                        </label>
-                    </div>
 
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="descending" id="flexRadioDefault2">
-                        <label class="form-check-label" for="flexRadioDefault1">
-                            Descending
-                        </label>
+                <div class="col-md-4">
+                    <div class="d-flex gap-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="order" id="ascendingRadio" value="asc">
+                            <label class="form-check-label" for="ascendingRadio">
+                                Ascending
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="order" id="descendingRadio" value="desc">
+                            <label class="form-check-label" for="descendingRadio">
+                                Descending
+                            </label>
+                        </div>
                     </div>
                 </div>
-                --->
 
+                <div class="col-md-4">
+                    <button class="btn btn-outline-primary w-100" type="submit">
+                        <i class="bi bi-funnel me-2"></i>Filter
+                    </button>
+                </div>
             </form>
-            
         </div>
+    </div>
+</div>
 
     
 

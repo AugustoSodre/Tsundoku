@@ -40,12 +40,7 @@
     //Post method
     if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['add_character'])){
 
-        print_r($_POST);
-
         $id = $_GET['edit'];
-
-        echo $id;
-        
         
         try{
         

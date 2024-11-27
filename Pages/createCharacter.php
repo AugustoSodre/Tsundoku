@@ -7,6 +7,7 @@
         
         //Adding character
         try{
+            
 
         $stmt = $pdo->prepare("INSERT INTO characters (
             name,
@@ -78,7 +79,7 @@
 
     <div class="container mt-4">
         
-        <!-- Main Form (Claude formatted it all from my raw HTML to Bootstrap) -->
+        <!-- Main Form -->
         <div class="card mb-4">
                 <div class="card-body">
                     <h5 class="card-title">Create New Character</h5>
