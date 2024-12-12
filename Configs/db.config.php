@@ -17,8 +17,16 @@ try{
 
 //Creating tables
 $query = 
-"CREATE TABLE IF NOT EXISTS characters(
+"CREATE TABLE IF NOT EXISTS users(
     id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(100) NOT NULL,
+    pwd VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS characters(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
     name VARCHAR(100) NOT NULL,
     race VARCHAR(50) NOT NULL,
     age int NOT NULL,
@@ -26,7 +34,8 @@ $query =
     level int DEFAULT 1,
     background TEXT,
     campaign VARCHAR(50) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(user_id) REFERENCES users (id)
 );
 
 CREATE TABLE IF NOT EXISTS attributes(

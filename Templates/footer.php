@@ -5,7 +5,7 @@ echo  <<<HTML
     <div class='container'>
         <div class='row'>
             <div class='col-md-6 mb-3 mb-md-0'>
-                <h5>RPG Character Manager</h5>
+                <h5>Tsundoku</h5>
                 <p class='mb-0'>'The best DnD 5e character manager!'</p>
             </div>
             <div class='col-md-6 text-md-end'>
@@ -22,7 +22,7 @@ echo  <<<HTML
         </div>
         <hr class='my-3'>
         <div class='text-center'>
-            <small>&copy; 2024 RPG Character Manager. All rights reserved.</small>
+            <small>&copy; 2024 Tsundoku RPG Character Manager. All rights reserved.</small>
         </div>
     </div>
 </footer>

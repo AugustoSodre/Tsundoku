@@ -1,6 +1,12 @@
 <?php
     session_start();
 
+    //Checking to see if user is logged in
+
+
+
+    
+    //Function to fetch/catch all the characters from DB
     function getCharactersFromDB($filter = "Created At", $order = "asc") {
         require("Configs/db.config.php");
         
@@ -39,8 +45,6 @@
 
         //--------------Order Validation-----------------//
 
-        
-
         // Accepted Orders
         $accepted_orders = ["ASC", "DESC"];
 
@@ -67,6 +71,7 @@
         
         
         //--------------DataBase Queries-----------------//
+        
         try {
             // Selecting the characters in the DB using provided filter
 
