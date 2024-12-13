@@ -16,8 +16,9 @@
             class,
             level,
             campaign,
-            background
-        ) VALUES(?, ?, ? , ?, ?, ?, ?);");
+            background,
+            user_id
+        ) VALUES(?, ?, ? , ?, ?, ?, ?, ?);");
 
         $stmt->execute([
             $_POST['name'],
@@ -27,6 +28,7 @@
             $_POST['level'],
             $_POST['campaign'],
             $_POST['background'],
+            $_SESSION['user_id'],
         ]);
 
         $character_id = $pdo->lastInsertId();

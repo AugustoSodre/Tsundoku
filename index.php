@@ -1,11 +1,7 @@
 <?php
     session_start();
 
-    //Checking to see if user is logged in
 
-
-
-    
     //Function to fetch/catch all the characters from DB
     function getCharactersFromDB($filter = "Created At", $order = "asc") {
         require("Configs/db.config.php");
@@ -76,7 +72,7 @@
             // Selecting the characters in the DB using provided filter
 
             $filter = "c." . $filter;
-
+            $user_id = $_SESSION['user_id'];
 
             $stmt = $pdo->prepare("SELECT 
                 c.id, 
@@ -95,9 +91,11 @@
                 a.wisdom, 
                 a.charisma
             FROM 
-                characters c
+                characters c 
             INNER JOIN 
                 attributes a ON c.id = a.character_id
+            WHERE 
+                c.user_id = $user_id
             ORDER BY " . $filter . " " . $order . ";");
             
             $stmt->execute();
@@ -156,6 +154,7 @@
 </head>
 
 <?php require_once("Templates/navbar.php"); ?>
+
 
 
 <body data-bs-theme='dark'>

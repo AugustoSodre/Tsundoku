@@ -5,6 +5,7 @@
     //Get method
     if ($_SERVER['REQUEST_METHOD'] == "GET" && isset($_GET['edit'])){
         //Getting the specific character
+        $user_id = $_SESSION['user_id'];
         try{
             $id = $_GET['edit'];
             $stmt = $pdo->query("SELECT 
