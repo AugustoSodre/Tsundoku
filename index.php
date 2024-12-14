@@ -1,6 +1,9 @@
 <?php
     session_start();
 
+    if (!isset($_SESSION['isLogged'])){
+        header("Location: http://localhost:801/RPG-Character-Management-System/Pages/login.php");
+    }
 
     //Function to fetch/catch all the characters from DB
     function getCharactersFromDB($filter = "Created At", $order = "asc") {
