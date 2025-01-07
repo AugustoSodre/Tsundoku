@@ -157,7 +157,8 @@
                                                 "Ranger",
                                                 "Rogue",
                                                 "Sorcerer",
-                                                "Warlock"
+                                                "Warlock",
+                                                "Wizard"
                                             ];
 
                                             foreach ($classes as $class){
