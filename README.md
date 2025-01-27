@@ -95,10 +95,6 @@ O sistema implementa várias medidas de segurança:
 
 Augusto Sodré
 
-## 📝 Licença
-
-Este projeto está sob a licença [sua escolha de licença].
-
 ---
 
 ## 🤝 Contribuições
