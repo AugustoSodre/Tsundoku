@@ -85,11 +85,13 @@ O sistema implementa várias medidas de segurança:
 
 ## 🎯 Futuras Melhorias
 
+- [ ] Adição de imagem nos cards
 - [ ] Sistema de equipamentos
 - [ ] Gerenciamento de magias
 - [ ] Exportação de ficha em PDF
 - [ ] Sistema de campanha compartilhada
 - [ ] Dados online para jogadas
+- [ ] Deploy em nuvem
 
 ## 👨‍💻 Autor
 
