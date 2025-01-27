@@ -54,7 +54,7 @@
                 $query = null;
                 $statement = null;
 
-                header("Location: http://localhost:801/RPG-Character-Management-System/index.php");
+                header("Location: http://localhost/RPG-Character-Management-System/index.php");
 
                 exit();
 

@@ -2,7 +2,7 @@
     session_start();
 
     if (!isset($_SESSION['isLogged'])){
-        header("Location: http://localhost:801/RPG-Character-Management-System/Pages/login.php");
+        header("Location: http://localhost/RPG-Character-Management-System/Pages/login.php");
     }
 
     //Function to fetch/catch all the characters from DB
@@ -130,16 +130,18 @@
 
     //Deleting a character
     if (isset($_GET['delete'])){
-      $stmt = $pdo->prepare("
-      DELETE FROM attributes WHERE character_id = ?;
-      DELETE FROM characters WHERE id = ?;
-      ");
+        require("Configs/db.config.php");
 
-      $stmt->execute([$_GET['delete'], $_GET['delete']]);
-      
-      $_SESSION['message'] = "Character deleted successfully!";
-      header("Location: index.php");
-      exit();
+        $stmt = $pdo->prepare("
+        DELETE FROM attributes WHERE character_id = ?;
+        DELETE FROM characters WHERE id = ?;
+        ");
+
+        $stmt->execute([$_GET['delete'], $_GET['delete']]);
+        
+        $_SESSION['message'] = "Character deleted successfully!";
+        header("Location: index.php");
+        exit();
     }
 
     

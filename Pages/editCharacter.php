@@ -161,6 +161,16 @@
                                                 "Wizard"
                                             ];
 
+                                            //Getting the original user's choice to be the first to appear:
+                                            echo "<option value=$class>" . $character[0]['class'] . "</option>";
+
+                                            
+                                            /* Kinda buggy, check out later:
+                                            
+                                            unset($classes[array_search($character[0]["class"], $classes)]);
+                                            */
+
+
                                             foreach ($classes as $class){
                                                 echo <<<HTML
                                                 <option value=$class>$class</option>

@@ -2,7 +2,7 @@
 session_start();
 
 if (isset($_SESSION["email"]) && $_SESSION["username"]){
-    header("Location: http://localhost:801/RPG-Character-Management-System/index.php");
+    header("Location: http://localhost/RPG-Character-Management-System/index.php");
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                 $_SESSION['username'] = $result[0]['username'];
                 $_SESSION['user_id'] = $result[0]['id'];
                 $_SESSION['isLogged'] = true;
-                header("Location: http://localhost:801/RPG-Character-Management-System/index.php");
+                header("Location: http://localhost/RPG-Character-Management-System/index.php");
                 exit();
             } else {
                 echo "Incorrect password!";

@@ -7,6 +7,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     $_SESSION['isLogged'] = null;
     $_SESSION['user_id'] = null;
 
-    header("Location: http://localhost:801/RPG-Character-Management-System/index.php");
+    header("Location: http://localhost/RPG-Character-Management-System/index.php");
     exit();
 }

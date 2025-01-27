@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 
 if (isset($_SESSION['user_id'])){
@@ -69,7 +68,7 @@ echo <<<HTML
       </ul>
     </div>
 
-    <a href="http://localhost:801/RPG-Character-Management-System/Pages/login.php">Log in to add Characters!</a>
+    <a href="http://localhost/RPG-Character-Management-System/Pages/login.php">Log in to add Characters!</a>
 
   </div>
 
