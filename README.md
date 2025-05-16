@@ -28,6 +28,9 @@ Tsundoku é um sistema de gerenciamento de personagens de D&D 5E desenvolvido em
   - MySQL
   - Apache (XAMPP)
 
+## Vídeo do projeto em funcionamento Local
+[Vídeo no Youtube](https://youtu.be/eH2WnmgxrQ0)
+
 ## 🚀 Como Executar o Projeto
 
 ### Pré-requisitos
